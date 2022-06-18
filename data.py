@@ -39,7 +39,7 @@ def enrich(data):
         yield d, c, a, b
 
 def generate_pos_only(data):
-#use this function in case when patient_a = patient_c
+    #use this function in cases when patient_a = patient_c
     for a, b, c, d in data:
         yield a, b, c, d
         yield c, d, a, b
