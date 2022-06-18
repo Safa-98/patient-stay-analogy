@@ -59,4 +59,4 @@ $ python3 evaluate_cnn_text.py # evaluate a classifier with the corresponding em
 - `train_cnn_con.py`: file to train the classifier model together with the embedding model for unstructured data
 - `evaluate_cnn_con.py`: file to evaluate a classifier with the corresponding embedding model and type of data
 - `utils.py`: tools for the different codes
-- `tools` folder: contains the file `parse.py`
+- **`tools` folder**: contains the file `parse.py`
