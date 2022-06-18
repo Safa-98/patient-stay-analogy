@@ -1,5 +1,5 @@
 # An analogy based framework for patient-stay identification in healthcare
-This repository contains source code for paper _An analogy based framework for patient-stay identification in healthcare_ submitted to the ICCBR-ATA 2022 Workshop.
+This repository contains source code for paper _An analogy based framework for patient-stay identification in healthcare_ submitted to the ICCBR-ATA 2022 Workshop. In this paper, we focus on the particular task of patient-stay identification, _i.e._, does a hospital stay belong to a patient or not? We propose a prototypical architecture that combines patient-stay representation learning and the analogical reasoning framework. We train a neural model to detect patient-stay analogies. Our models are implemented using PyTorch.
 
 ## Requirements
 
@@ -35,13 +35,13 @@ $ python3 doc2vec.py --phase train # train doc2vec model
 $ python3 doc2vec.py --phase infer # infer doc2vec vectors
 ```
 
-To train and evaluate the classification and the corresponding embedding model on structured and unstructured data
+To train and evaluate the classification and the corresponding embedding model on structured and unstructured data, run:
 ```bash
 $ python3 train_cnn_both.py # train classifier model together with the embedding model 
 $ python3 evaluate_cnn_both.py # evaluate a classifier with the corresponding embedding model
 ```
 
-To train and evaluate the classification and the corresponding embedding model on only unstructured data
+To train and evaluate the classification and the corresponding embedding model on only unstructured data, run:
 ```bash
 $ python3 train_cnn_text.py # train classifier model together with the embedding model 
 $ python3 evaluate_cnn_text.py # evaluate a classifier with the corresponding embedding model
@@ -59,3 +59,4 @@ $ python3 evaluate_cnn_text.py # evaluate a classifier with the corresponding em
 - `train_cnn_con.py`: file to train the classifier model together with the embedding model for unstructured data
 - `evaluate_cnn_con.py`: file to evaluate a classifier with the corresponding embedding model and type of data
 - `utils.py`: tools for the different codes
+- `tools` folder: contains the file `parse.py`
