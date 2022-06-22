@@ -67,7 +67,7 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
 
 
     # Load data
-    train_dataloader = DataLoader(train_subset, batch_size=1, shuffle=True, num_workers=args.workers, pin_memory=True)
+    train_dataloader = DataLoader(train_subset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True)
 
 
     # --- Training models ---
