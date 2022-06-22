@@ -65,7 +65,7 @@ def evaluate_classifier(filename, nb_analogies, rd_seed):
         test_subset = test_dataset
     
 
-    test_dataloader = DataLoader(test_subset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True)
+    test_dataloader = DataLoader(test_subset, batch_size=1, shuffle=True, num_workers=args.workers, pin_memory=True)
 
     path_models = f"mimic_id/classif_cnn/classification3_1_con_40e.pth"
     saved_models = torch.load(path_models)
