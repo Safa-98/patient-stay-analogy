@@ -49,7 +49,7 @@ class CNN(nn.Module):
                     )
 
 
-    def forward(self, dd, content):  
+    def forward(self, content, dd = None):  
         if dd is not None and content is not None:
             # demo embedding
             dsize = list(dd.size()) + [-1]
