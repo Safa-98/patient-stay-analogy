@@ -64,7 +64,7 @@ $ python3 doc2vec.py --phase train # train doc2vec model
 $ python3 doc2vec.py --phase infer # infer doc2vec vectors
 ```
 
-To train and evaluate the classification and the corresponding embedding model on **structured and unstructured** data
+To train and evaluate the classification and the corresponding embedding model on **structured and unstructured** data <br/>
 **For _level 4_ code, run the following:**
 ```bash
 $ python3 Identity+Sequent/T2_train_both_icd.py # train classifier model together with the embedding model 
@@ -84,7 +84,7 @@ $ python3 Identity+Sequent/T2_evaluate_both_blk.py # evaluate a classifier with 
 ```
 
 
-To train and evaluate the classification and the corresponding embedding model on only **unstructured** data
+To train and evaluate the classification and the corresponding embedding model on only **unstructured** data <br/>
 **For _level 4_ code, run the following:**
 ```bash
 $ python3 Identity+Sequent/T2_train_con_icd.py # train classifier model together with the embedding model 
@@ -114,7 +114,7 @@ $ python3 doc2vec.py --phase train # train doc2vec model
 $ python3 doc2vec.py --phase infer # infer doc2vec vectors
 ```
 
-To train and evaluate the classification and the corresponding embedding model on **structured and unstructured** data
+To train and evaluate the classification and the corresponding embedding model on **structured and unstructured** data <br/>
 **For _level 4_ code, run the following:**
 ```bash
 $ python3 Identity+DSequent/T3_train_both_icd.py # train classifier model together with the embedding model 
@@ -133,7 +133,7 @@ $ python3 Identity+DSequent/T3_evaluate_both_blk.py # evaluate a classifier with
 ```
 
 
-To train and evaluate the classification and the corresponding embedding model on only **unstructured** data
+To train and evaluate the classification and the corresponding embedding model on only **unstructured** data <br/>
 **For _level 4_ code, run the following:**
 ```bash
 $ python3 Identity+DSequent/T3_train_con_icd.py # train classifier model together with the embedding model 
