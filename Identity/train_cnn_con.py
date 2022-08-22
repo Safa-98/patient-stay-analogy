@@ -13,10 +13,8 @@ from sklearn.model_selection import train_test_split
 from copy import copy
 from utils import elapsed_timer
 from data import Task1Dataset, enrich, generate_negative, generate_pos_only
-from analogy_classif_both import Classification
-import cnn_both
-
-
+from analogy_classif_con import Classification
+import cnn_con
 import sys
 import json
 import os
@@ -56,7 +54,6 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
 
     train_dataset.analogies = train_analogies
 
-    
 
     # Get subsets
 
@@ -70,14 +67,14 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
 
 
     # Load data
-    train_dataloader = DataLoader(train_subset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True)
+    train_dataloader = DataLoader(train_subset, batch_size=1, shuffle=True, num_workers=args.workers, pin_memory=True)
 
 
     # --- Training models ---
 
 
     classification_model = Classification(args.embed_size) # 16 because 16 filters of each size, 5 because 5 sizes
-    embedding_model = cnn_both.CNN(args)
+    embedding_model = cnn_con.CNN(args)
 
 
     # --- Training Loop ---
@@ -89,6 +86,7 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
 
     losses_list = []
     times_list = []
+    
     for epoch in range(epochs):
 
         losses = []
@@ -100,23 +98,22 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
                 analogy_element_b, dd_b, content_b = b
                 analogy_element_c, dd_c, content_c, patient_c = c
                 analogy_element_d, dd_d, content_d = d
-                #print(a)
+                #print("a", analogy_element_a, patient_a, "b", analogy_element_b, "c", analogy_element_c, patient_c, "d", analogy_element_d)
 
                 # compute the embeddings
-                a = embedding_model(dd_a.to(device), content_a.to(device)) 
-                b = embedding_model(dd_b.to(device), content_b.to(device))
-                c = embedding_model(dd_c.to(device), content_c.to(device))
-                d = embedding_model(dd_d.to(device), content_d.to(device))
-            
+                a = embedding_model(content_a.to(device)) 
+                b = embedding_model(content_b.to(device))
+                c = embedding_model(content_c.to(device))
+                d = embedding_model(content_d.to(device))
 
                 # to be able to add other losses, which are tensors, we initialize the loss as a 0 tensor
                 loss = torch.tensor(0).to(device).float()
 
                 data = torch.stack([a, b, c, d], dim = 1)
+       
 
                 if patient_a != patient_c:
                     for a, b, c, d in enrich(data):
-
                         # positive example, target is 1
                         a = torch.unsqueeze(torch.unsqueeze(a, 0), 0)
                         b = torch.unsqueeze(torch.unsqueeze(b, 0), 0)
@@ -124,13 +121,11 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
                         d = torch.unsqueeze(torch.unsqueeze(d, 0), 0)
 
                         is_analogy = classification_model(a, b, c, d)
-
                         expected = torch.ones(is_analogy.size(), device=is_analogy.device)
 
                         loss += criterion(is_analogy, expected)
  
                     for a, b, c, d in generate_negative(data):
-
                         # negative examples, target is 0
                         a = torch.unsqueeze(torch.unsqueeze(a, 0), 0)
                         b = torch.unsqueeze(torch.unsqueeze(b, 0), 0)
@@ -148,8 +143,8 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
                     losses.append(loss.cpu().item())
     
                 else:
-                    
                     for a, b, c, d in generate_pos_only(data):
+
                         # positive example, target is 1
                         a = torch.unsqueeze(torch.unsqueeze(a, 0), 0)
                         b = torch.unsqueeze(torch.unsqueeze(b, 0), 0)
@@ -184,8 +179,9 @@ def train_classifier(filename, nb_analogies, epochs, rd_seed):
         losses_list.append(mean(losses))
         times_list.append(elapsed())
         print(f"Epoch: {epoch}, Run time: {times_list[-1]:4.5}s, Loss: {losses_list[-1]}")
-    torch.save({"state_dict_classification": classification_model.cpu().state_dict(), "state_dict_embeddings": embedding_model.cpu().state_dict(), "losses": losses_list, "times": times_list}, f"mimic_id/classif_cnn/classification_{rd_seed}_both_{epochs}e.pth")
+
+    torch.save({"state_dict_classification": classification_model.cpu().state_dict(), "state_dict_embeddings": embedding_model.cpu().state_dict(), "losses": losses_list, "times": times_list}, f"mimic_id/classif_cnn/classification_{rd_seed}_con_{epochs}e.pth")
 
 if __name__ == '__main__':
-    train_classifier(filename = "T1_IDENTITY_200.txt", nb_analogies = 50000, epochs = 10, rd_seed = 1)
+    train_classifier(filename = "T1_IDENTITY_200.txt", nb_analogies = 50000, epochs = 20, rd_seed = 1)
 

@@ -18,8 +18,8 @@ from copy import copy
 from statistics import mean
 from utils import elapsed_timer, get_accuracy_classification
 from data import Task1Dataset, enrich, generate_negative, generate_pos_only
-from analogy_classif_both import Classification
-import cnn_both
+from analogy_classif_con import Classification
+import cnn_con
 import sys
 sys.path.append('tools')
 import parse
@@ -65,14 +65,13 @@ def evaluate_classifier(filename, nb_analogies, rd_seed):
         test_subset = test_dataset
     
 
-    test_dataloader = DataLoader(test_subset, batch_size=args.batch_size, shuffle=True, num_workers=args.workers, pin_memory=True)
-    
-    #add the path to the model
-    path_models = f"mimic_id/classif_cnn/classification3_1_both_40e.pth"
+    test_dataloader = DataLoader(test_subset, batch_size=1, shuffle=True, num_workers=args.workers, pin_memory=True)
+
+    path_models = f"mimic_id/classif_cnn/classification_1_con_40e.pth"
     saved_models = torch.load(path_models)
 
 
-    embedding_model = cnn_both.CNN(args)
+    embedding_model = cnn_con.CNN(args)
     embedding_model.load_state_dict(saved_models['state_dict_embeddings'])
     embedding_model.eval()
 
@@ -94,10 +93,10 @@ def evaluate_classifier(filename, nb_analogies, rd_seed):
         #print(a)
 
         # compute the embeddings
-        a = embedding_model(dd_a.to(device), content_a.to(device)) 
-        b = embedding_model(dd_b.to(device), content_b.to(device))
-        c = embedding_model(dd_c.to(device), content_c.to(device))
-        d = embedding_model(dd_d.to(device), content_d.to(device))
+        a = embedding_model(content_a.to(device)) 
+        b = embedding_model(content_b.to(device))
+        c = embedding_model(content_c.to(device))
+        d = embedding_model(content_d.to(device))
 
         data = torch.stack([a, b, c, d], dim = 1)
 
@@ -159,6 +158,8 @@ def evaluate_classifier(filename, nb_analogies, rd_seed):
                 expected = torch.ones(is_analogy.size(), device=is_analogy.device)
 
                 accuracy_true.append(get_accuracy_classification(expected, is_analogy))
+
+            
 
 
     print(f'Accuracy for valid analogies: {mean(accuracy_true)}\nAccuracy for invalid analogies: {mean(accuracy_false)}')
